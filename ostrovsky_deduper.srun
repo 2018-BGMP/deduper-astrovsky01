@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+#SBATCH --partition=short
+#SBATCH --job-name=dedup
+#SBATCH --output=dedupout
+#SBATCH --error=deduperr
+#SBATCH --time=0-10:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem 10000M
+
+#SBATCH --mail-type=all
+#SBATCH --mail-user=alexo@uoregon.edu
+
+ml samtools
+ml python3/3.6.5
+
+samtools sort -O sam /projects/bgmp/shared/deduper/Dataset3.sam > /projects/bgmp/alexo/Dataset3sort.sam
+
+python3 ./ostrovsky_deduper.py -f /projects/bgmp/alexo/Dataset3sort.sam -u /projects/bgmp/alexo/STL96.txt
